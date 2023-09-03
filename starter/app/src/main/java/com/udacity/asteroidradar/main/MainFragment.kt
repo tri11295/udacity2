@@ -136,7 +136,7 @@ class MainFragment : Fragment() {
                 viewModel.listSavedAsteroids
             }
         }
-        asteroidAdapter.setData(listDisplay)
+        asteroidAdapter.submitList(listDisplay)
     }
 
     private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
