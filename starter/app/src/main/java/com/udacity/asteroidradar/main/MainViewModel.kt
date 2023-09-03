@@ -34,10 +34,6 @@ class MainViewModel : ViewModel() {
     val getPictureOfDayLiveData: LiveData<PictureOfDay?>
         get() = _getPictureOfDayLiveData
 
-    private val _getListAsteroidsLiveData = MutableLiveData<List<AsteroidModel>>()
-    val getListAsteroidsLiveData: LiveData<List<AsteroidModel>>
-        get() = _getListAsteroidsLiveData
-
     val allAsteroids: LiveData<List<AsteroidModel>>
         get() = asteroidDao.getAllAsteroids()
 
@@ -65,34 +61,6 @@ class MainViewModel : ViewModel() {
                 }
             }
             override fun onFailure(call: Call<PictureOfDay>, t: Throwable) {
-                _showErrorLiveData.postValue(t.message)
-            }
-        })
-    }
-
-    fun getAsteroidsNeoWs(startDate: String, endDate: String) {
-        val call: Call<AsteroidsNeoWs> = apiRepository.getAsteroidsNeoWs(startDate, endDate)
-        call.enqueue(object : Callback<AsteroidsNeoWs> {
-            override fun onResponse(
-                call: Call<AsteroidsNeoWs>,
-                response: Response<AsteroidsNeoWs>
-            ) {
-                if (response.isSuccessful) {
-                    viewModelScope.launch {
-                        val result = response.body()
-                        val listAsteroidModel = mutableListOf<AsteroidModel>()
-                        result?.nearEarthObjects?.forEach {
-                            listAsteroidModel.addAll(it.value.map { asteroid ->
-                                asteroid.convertToAsteroidModel()
-                            })
-                        }
-                        asteroidDao.insertAsteroidsByWeek(listAsteroidModel)
-                    }
-                } else {
-                    _showErrorLiveData.postValue(response.message())
-                }
-            }
-            override fun onFailure(call: Call<AsteroidsNeoWs>, t: Throwable) {
                 _showErrorLiveData.postValue(t.message)
             }
         })

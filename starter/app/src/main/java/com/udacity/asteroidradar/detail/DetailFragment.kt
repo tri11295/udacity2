@@ -44,7 +44,13 @@ class DetailFragment : Fragment() {
             displayAstronomicalUnitExplanationDialog()
         }
 
-
+        if (args.selectedAsteroid.isPotentiallyHazardous) {
+            binding.activityMainImageOfTheDay.contentDescription =
+                getString(R.string.potentially_hazardous_asteroid_image)
+        } else {
+            binding.activityMainImageOfTheDay.contentDescription =
+                getString(R.string.not_hazardous_asteroid_image)
+        }
         return binding.root
     }
 

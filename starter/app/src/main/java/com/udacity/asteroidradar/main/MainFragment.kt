@@ -70,7 +70,6 @@ class MainFragment : Fragment() {
 
     private fun initData() {
         viewModel.getPictureOfDay()
-        viewModel.getAsteroidsNeoWs(dayOfWeek.first(), dayOfWeek.last())
     }
 
     private fun observeLiveData() {
@@ -88,16 +87,16 @@ class MainFragment : Fragment() {
             viewModel.listSavedAsteroids = it.orEmpty()
         }
 
-        viewModel.getListAsteroidsLiveData.observe(viewLifecycleOwner) {
-            asteroidAdapter.setData(it.toMutableList())
-        }
-
         viewModel.showErrorLiveData.observe(viewLifecycleOwner) {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
 
         viewModel.getPictureOfDayLiveData.observe(viewLifecycleOwner) {
-            binding.ivOfTheDay.loadUrl(it?.url.orEmpty())
+            if (it?.mediaType == "image") {
+                binding.ivOfTheDay.loadUrl(it.url.orEmpty())
+            }
+            binding.ivOfTheDay.contentDescription =
+                getString(R.string.nasa_picture_of_day_content_description_format, it?.title)
         }
     }
 
