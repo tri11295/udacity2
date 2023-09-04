@@ -1,6 +1,8 @@
 package com.udacity.asteroidradar
 
 import android.content.Context
+import androidx.work.Constraints
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
@@ -60,9 +62,12 @@ class AsteroidWorker(private val context: Context, workerParams: WorkerParameter
     }
 
     private fun scheduleRecurringWork() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresCharging(true).build()
         val asteroidWorkRequest = PeriodicWorkRequest.Builder(
-            AsteroidWorker::class.java, 15, TimeUnit.DAYS
-        ).build()
+            AsteroidWorker::class.java, 1, TimeUnit.DAYS
+        ).setConstraints(constraints).build()
         WorkManager.getInstance(applicationContext).enqueue(asteroidWorkRequest)
     }
 

@@ -1,6 +1,6 @@
 package com.udacity.asteroidradar.api
 
-import com.udacity.asteroidradar.Constants.API_KEY
+import com.udacity.asteroidradar.BuildConfig
 import com.udacity.asteroidradar.Constants.BASE_URL
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -15,7 +15,7 @@ object RetrofitClient {
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
             val newUrl = originalRequest.url().newBuilder()
-                .addQueryParameter("api_key", API_KEY)
+                .addQueryParameter("api_key", BuildConfig.apiKey )
                 .build()
             val newRequest = originalRequest.newBuilder().url(newUrl).build()
             return chain.proceed(newRequest)

@@ -93,7 +93,7 @@ class MainFragment : Fragment() {
 
         viewModel.getPictureOfDayLiveData.observe(viewLifecycleOwner) {
             if (it?.mediaType == "image") {
-                binding.ivOfTheDay.loadUrl(it.url.orEmpty())
+                binding.ivOfTheDay.loadUrl(it.url)
             }
             binding.ivOfTheDay.contentDescription =
                 getString(R.string.nasa_picture_of_day_content_description_format, it?.title)
